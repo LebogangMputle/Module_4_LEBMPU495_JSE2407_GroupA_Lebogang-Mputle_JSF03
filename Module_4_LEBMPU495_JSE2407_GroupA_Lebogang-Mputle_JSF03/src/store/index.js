@@ -14,8 +14,14 @@ const store = createStore({
     addToCart(state, product) {
       state.cart.push(product);
     },
+    removeFromCart(state, productId) {
+      state.cart = state.cart.filter(product => product.id !== productId);
+    },
     addToWishlist(state, product) {
       state.wishlist.push(product);
+    },
+    removeFromWishlist(state, productId) {
+      state.wishlist = state.wishlist.filter(product => product.id !== productId);
     },
     setIsLoggedIn(state, status) {
       state.isLoggedIn = status;
