@@ -39,8 +39,8 @@
           <p class="text-gray-500 mb-2">{{ product.category }}</p>
           <p class="text-blue-500 font-bold mb-2">${{ product.price.toFixed(2) }}</p>
           <div class="flex gap-2">
-            <button @click="addToCart(product)" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition">Add to Cart</button>
-            <button @click="addToWishlist(product)" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition">Add to Wishlist</button>
+            <button @click.stop="addToCart(product)" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition">Add to Cart</button>
+            <button @click.stop="addToWishlist(product)" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition">Add to Wishlist</button>
           </div>
           
           <div class="flex items-center mb-2">
@@ -127,19 +127,17 @@ export default {
     },
     addToCart(product) {
       alert(`Added ${product.title} to cart!`);
-      this.$store.commit('cart/addToCart', product);
-      // Implement actual add to cart functionality
+      this.$store.commit('addToCart', product);
     },
     addToWishlist(product) {
       alert(`Added ${product.title} to wishlist!`);
-      this.$store.commit('wishlist/addToWishlist', product);
-      // Implement actual add to wishlist functionality
+      this.$store.commit('addToWishlist', product);
     },
-  removeFromCart(productId) {
-      this.$store.commit('cart/removeFromCart', productId);
+    removeFromCart(productId) {
+      this.$store.commit('removeFromCart', productId);
     },
     removeFromWishlist(productId) {
-      this.$store.commit('wishlist/removeFromWishlist', productId);
+      this.$store.commit('removeFromWishlist', productId);
     }
   },
   created() {
