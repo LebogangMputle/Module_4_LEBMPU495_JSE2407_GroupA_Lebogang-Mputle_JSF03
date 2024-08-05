@@ -1,6 +1,7 @@
 <template>
   <div class="p-4 bg-[#caf0f8]">
     <h1 class="text-2xl font-semibold mb-4">Cart</h1>
+    <button @click="$router.push('/')" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition mb-4">Back to Products</button>
     <div v-if="cart.length === 0" class="text-center text-gray-600">Your cart is empty.</div>
     <div v-else class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
       <div v-for="product in cart" :key="product.id" class="product-card border shadow p-4 bg-white">

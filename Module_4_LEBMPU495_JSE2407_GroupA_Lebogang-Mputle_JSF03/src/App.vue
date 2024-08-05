@@ -1,18 +1,18 @@
 <template>
   <div id="app">
-    <!-- <Header @toggle-login="showLoginModal = !showLoginModal" /> -->
+    <Header @toggle-login="showLoginModal = !showLoginModal" />
     <router-view></router-view> <!-- Display routed components -->
     <LoginModal v-if="showLoginModal" @login="handleLogin" @cancel="showLoginModal = false" />
   </div>
 </template>
 
 <script>
-// import Header from './components/Header.vue';
+import Header from './components/Header.vue';
 import LoginModal from './components/LoginModal.vue';
 
 export default {
   components: {
-    // Header,
+    Header,
     LoginModal
   },
   data() {
