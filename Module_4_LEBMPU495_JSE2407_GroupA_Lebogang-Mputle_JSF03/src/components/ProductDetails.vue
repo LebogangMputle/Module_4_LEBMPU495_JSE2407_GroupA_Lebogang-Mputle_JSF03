@@ -1,45 +1,56 @@
 <template>
-    <div>
-      <button @click="$router.go(-1)">Back</button>
-      <div v-if="product">
-        <h1>{{ product.title }}</h1>
-        <img :src="product.image" :alt="product.title" class="w-full h-auto" />
-        <p>{{ product.description }}</p>
-        <p>{{ product.price }}</p>
-        <button @click="addToCart(product)">Add to Cart</button>
-        <button @click="addToWishlist(product)">Add to Wishlist</button>
-      </div>
+  <div>
+    <button @click="$router.go(-1)">Back</button>
+    <div v-if="product">
+      <h1>{{ product.title }}</h1>
+      <img :src="product.image" :alt="product.title" class="w-full h-auto" />
+      <p>{{ product.description }}</p>
+      <p>\${{ product.price.toFixed(2) }}</p>
+      <button @click="addToCart(product)">Add to Cart</button>
+      <button @click="addToWishlist(product)">Add to Wishlist</button>
     </div>
-  </template>
-  
-  <script>
-  export default {
-    computed: {
-      product() {
-        const product = this.$store.getters.products.find(product => product.id === Number(this.$route.params.id));
-        console.log('Product:', product); // Log product to check image URL
-        return product;
+    <div v-if="loading">Loading...</div>
+  </div>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      product: null,
+      loading: true
+    };
+  },
+  methods: {
+    async fetchProduct() {
+      try {
+        const response = await fetch(`https://fakestoreapi.com/products/${this.$route.params.id}`);
+        if (!response.ok) {
+          throw new Error('Product not found');
+        }
+        this.product = await response.json();
+      } catch (error) {
+        console.error('Error fetching product:', error);
+      } finally {
+        this.loading = false;
       }
     },
-    methods: {
-      addToCart(product) {
-        this.$store.commit('addToCart', product);
-      },
-      addToWishlist(product) {
-        this.$store.commit('addToWishlist', product);
-      }
+    addToCart(product) {
+      this.$store.commit('addToCart', product);
     },
-    created() {
-      if (!this.product) {
-        this.$store.dispatch('fetchProducts').then(() => {
-          this.$forceUpdate(); // Force component update after fetch
-        });
-      }
+    addToWishlist(product) {
+      this.$store.commit('addToWishlist', product);
     }
-  };
-  </script>
-  
-  <style scoped>
-  /* Add any additional styles you need here */
-  </style>
-  
+  },
+  watch: {
+    '$route.params.id': 'fetchProduct' // Watch for route parameter changes
+  },
+  created() {
+    this.fetchProduct();
+  }
+};
+</script>
+
+<style scoped>
+/* Add any additional styles you need here */
+</style>

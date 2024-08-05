@@ -1,35 +1,28 @@
 <template>
   <div id="app">
-    <Header @toggle-login="showLoginModal = !showLoginModal" />
-    <ProductList v-if="isLoggedIn" @select-product="selectedProduct = $event" />
-    <ProductDetails v-if="selectedProduct" :product="selectedProduct" @back="selectedProduct = null" />
+    <!-- <Header @toggle-login="showLoginModal = !showLoginModal" /> -->
+    <router-view></router-view> <!-- Display routed components -->
     <LoginModal v-if="showLoginModal" @login="handleLogin" @cancel="showLoginModal = false" />
   </div>
 </template>
 
 <script>
-import Header from './components/Header.vue';
-import ProductList from './components/ProductList.vue';
-import ProductDetails from './components/ProductDetails.vue';
+// import Header from './components/Header.vue';
 import LoginModal from './components/LoginModal.vue';
 
 export default {
   components: {
-    Header,
-    ProductList,
-    ProductDetails,
+    // Header,
     LoginModal
   },
   data() {
     return {
-      isLoggedIn: false,
-      showLoginModal: true,
-      selectedProduct: null
+      showLoginModal: false, // Set to false initially
     };
   },
   methods: {
     handleLogin() {
-      this.isLoggedIn = true;
+      this.$router.push('/product-list'); // Navigate to product list on login
       this.showLoginModal = false;
     }
   }
