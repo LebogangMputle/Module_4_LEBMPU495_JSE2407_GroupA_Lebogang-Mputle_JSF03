@@ -1,7 +1,13 @@
 import { createApp } from 'vue';
 import App from './App.vue';
-import router from './store/index';
+import router from './router/index';
 import store from './store/index'; // import Vuex store
+import './assets/index.css'; // Ensure this path is correct
+
+
+// Polyfill for process
+import process from 'process';
+window.process = process;
 
 createApp(App)
   .use(router)
