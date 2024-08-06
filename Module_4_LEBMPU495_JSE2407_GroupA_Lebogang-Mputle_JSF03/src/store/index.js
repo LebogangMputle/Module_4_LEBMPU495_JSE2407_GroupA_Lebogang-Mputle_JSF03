@@ -104,33 +104,16 @@ const actions = {
  * @type {Object}
  */
 const getters = {
-  /**
-   * Retrieves the list of products.
-   * @param {State} state - The state object.
-   * @returns {Array} The list of products.
-   */
   products: (state) => state.products,
-
-  /**
-   * Retrieves the list of products in the cart.
-   * @param {State} state - The state object.
-   * @returns {Array} The list of products in the cart.
-   */
   cart: (state) => state.cart,
-
-  /**
-   * Retrieves the list of products in the wishlist.
-   * @param {State} state - The state object.
-   * @returns {Array} The list of products in the wishlist.
-   */
   wishlist: (state) => state.wishlist,
-
-  /**
-   * Retrieves the user's login status.
-   * @param {State} state - The state object.
-   * @returns {boolean} The user's login status.
-   */
   isLoggedIn: (state) => state.isLoggedIn,
+  /**
+   * Retrieves the number of items in the cart.
+   * @param {State} state - The state object.
+   * @returns {number} The number of items in the cart.
+   */
+  cartCount: (state) => state.cart.length,
 };
 
 export default createStore({

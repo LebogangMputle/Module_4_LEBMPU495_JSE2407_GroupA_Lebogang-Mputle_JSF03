@@ -16,33 +16,37 @@
   
   <script>
   export default {
-    computed: {
-      product() {
-        const product = this.$store.getters.cartItems.find(product => product.id === Number(this.$route.params.id)) || 
-                        this.$store.getters.wishlistItems.find(product => product.id === Number(this.$route.params.id));
-        console.log('Product:', product); // Log product to check image URL
-        return product;
+    name: 'ProductDetails',
+    props: {
+      /**
+       * The ID of the product to display.
+       * @type {number}
+       */
+      id: {
+        type: Number,
+        required: true
       }
     },
-    methods: {
-      addToCart(product) {
-        this.$store.commit('cart/addToCart', product);
-      },
-      addToWishlist(product) {
-        this.$store.commit('wishlist/addToWishlist', product);
-      },
-      removeFromCart(productId) {
-        this.$store.commit('cart/removeFromCart', productId);
-      },
-      removeFromWishlist(productId) {
-        this.$store.commit('wishlist/removeFromWishlist', productId);
-      }
+    data() {
+      return {
+        /**
+         * The product details.
+         * @type {Object|null}
+         */
+        product: null
+      };
     },
     created() {
-      if (!this.product) {
-        this.$store.dispatch('fetchProducts').then(() => {
-          this.$forceUpdate(); // Force component update after fetch
-        });
+      this.fetchProductDetails();
+    },
+    methods: {
+      /**
+       * Fetches the product details from the API.
+       * @returns {Promise<void>}
+       */
+      async fetchProductDetails() {
+        const response = await fetch(`https://fakestoreapi.com/products/${this.id}`);
+        this.product = await response.json();
       }
     }
   };
