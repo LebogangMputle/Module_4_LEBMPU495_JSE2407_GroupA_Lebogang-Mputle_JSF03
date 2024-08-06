@@ -80,16 +80,54 @@
 export default {
   data() {
     return {
+      /**
+       * The list of products.
+       * @type {Array<Object>}
+       */
       products: [],
+
+      /**
+       * The list of product categories.
+       * @type {Array<string>}
+       */
       categories: [],
+
+      /**
+       * The selected category for filtering products.
+       * @type {string}
+       */
       selectedCategory: 'all',
+
+      /**
+       * The search query for filtering products.
+       * @type {string}
+       */
       searchQuery: '',
+
+      /**
+       * The sort order for sorting products.
+       * @type {string}
+       */
       sortOrder: 'default',
+
+      /**
+       * Indicates whether the products are loading.
+       * @type {boolean}
+       */
       loading: false,
+
+      /**
+       * The currently selected product for detailed view.
+       * @type {Object|null}
+       */
       selectedProduct: null,
     };
   },
   methods: {
+    /**
+     * Fetches the list of product categories from the API.
+     * @returns {Promise<void>}
+     */
     async getCategories() {
       try {
         const response = await fetch('https://fakestoreapi.com/products/categories');
@@ -98,6 +136,11 @@ export default {
         console.error('Error fetching categories:', error);
       }
     },
+
+    /**
+     * Fetches the list of products from the API and applies category filter.
+     * @returns {Promise<void>}
+     */
     async getProduct() {
       this.loading = true;
       try {
@@ -112,9 +155,17 @@ export default {
         this.loading = false;
       }
     },
+
+    /**
+     * Filters the products based on the search query.
+     */
     filterProducts() {
       this.products = this.products.filter(product => product.title.toLowerCase().includes(this.searchQuery.toLowerCase()));
     },
+
+    /**
+     * Sorts the products based on the selected sort order.
+     */
     sortProducts() {
       if (this.sortOrder === 'price-asc') {
         this.products.sort((a, b) => a.price - b.price);
@@ -122,20 +173,45 @@ export default {
         this.products.sort((a, b) => b.price - a.price);
       }
     },
+
+    /**
+     * Handles the click event on a product to show its details.
+     * @param {Object} product - The selected product.
+     */
     handleProductClick(product) {
       this.selectedProduct = product;
     },
+
+    /**
+     * Adds a product to the cart.
+     * @param {Object} product - The product to add to the cart.
+     */
     addToCart(product) {
       alert(`Added ${product.title} to cart!`);
       this.$store.commit('addToCart', product);
     },
+
+    /**
+     * Adds a product to the wishlist.
+     * @param {Object} product - The product to add to the wishlist.
+     */
     addToWishlist(product) {
       alert(`Added ${product.title} to wishlist!`);
       this.$store.commit('addToWishlist', product);
     },
+
+    /**
+     * Removes a product from the cart.
+     * @param {number} productId - The ID of the product to remove from the cart.
+     */
     removeFromCart(productId) {
       this.$store.commit('removeFromCart', productId);
     },
+
+    /**
+     * Removes a product from the wishlist.
+     * @param {number} productId - The ID of the product to remove from the wishlist.
+     */
     removeFromWishlist(productId) {
       this.$store.commit('removeFromWishlist', productId);
     }
