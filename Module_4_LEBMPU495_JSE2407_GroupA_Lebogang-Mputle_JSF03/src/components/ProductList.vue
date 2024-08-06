@@ -121,6 +121,12 @@ export default {
        * @type {Object|null}
        */
       selectedProduct: null,
+
+      /**
+       * The original list of products before sorting or filtering.
+       * @type {Array<Object>}
+       */
+      originalProducts: [],
     };
   },
   methods: {
@@ -145,8 +151,8 @@ export default {
       this.loading = true;
       try {
         const response = await fetch('https://fakestoreapi.com/products');
-        const allProducts = await response.json();
-        this.products = allProducts.filter(product => this.selectedCategory === 'all' || product.category === this.selectedCategory);
+        this.originalProducts = await response.json();
+        this.products = this.originalProducts.filter(product => this.selectedCategory === 'all' || product.category === this.selectedCategory);
         this.filterProducts();
         this.sortProducts();
       } catch (error) {
@@ -160,14 +166,23 @@ export default {
      * Filters the products based on the search query.
      */
     filterProducts() {
-      this.products = this.products.filter(product => product.title.toLowerCase().includes(this.searchQuery.toLowerCase()));
+      this.products = this.originalProducts.filter(product => 
+        product.title.toLowerCase().includes(this.searchQuery.toLowerCase()) &&
+        (this.selectedCategory === 'all' || product.category === this.selectedCategory)
+      );
+      this.sortProducts(); // Ensure sorting is applied after filtering
     },
 
     /**
      * Sorts the products based on the selected sort order.
      */
     sortProducts() {
-      if (this.sortOrder === 'price-asc') {
+      if (this.sortOrder === 'default') {
+        this.products = [...this.originalProducts.filter(product => 
+          product.title.toLowerCase().includes(this.searchQuery.toLowerCase()) &&
+          (this.selectedCategory === 'all' || product.category === this.selectedCategory)
+        )];
+      } else if (this.sortOrder === 'price-asc') {
         this.products.sort((a, b) => a.price - b.price);
       } else if (this.sortOrder === 'price-desc') {
         this.products.sort((a, b) => b.price - a.price);
