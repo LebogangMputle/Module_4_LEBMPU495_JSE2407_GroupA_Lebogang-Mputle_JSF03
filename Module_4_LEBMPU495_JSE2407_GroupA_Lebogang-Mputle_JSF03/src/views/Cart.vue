@@ -32,29 +32,67 @@
 
 <script>
 export default {
+  /**
+   * Data properties of the component.
+   * @returns {Object}
+   */
   data() {
     return {
+      /**
+       * The current sort order for the cart items.
+       * @type {string}
+       */
       sortOrder: 'default',
+      /**
+       * The current search query for filtering cart items.
+       * @type {string}
+       */
       searchQuery: '',
+      /**
+       * The filtered list of cart items.
+       * @type {Array<Object>}
+       */
       filteredCart: []
     };
   },
   computed: {
+    /**
+     * Computed property to get the cart items from the store.
+     * @returns {Array<Object>}
+     */
     cart() {
       return this.$store.getters.cart;
     }
   },
   watch: {
+    /**
+     * Watcher for the cart items.
+     * Calls updateFilteredCart method when the cart items change.
+     */
     cart: 'updateFilteredCart',
+    /**
+     * Watcher for the sortOrder property.
+     * Calls sortItems method when the sortOrder changes.
+     */
     sortOrder: 'sortItems',
+    /**
+     * Watcher for the searchQuery property.
+     * Calls filterItems method when the searchQuery changes.
+     */
     searchQuery: 'filterItems'
   },
   methods: {
+    /**
+     * Updates the filteredCart property based on the current cart items.
+     */
     updateFilteredCart() {
       this.filteredCart = [...this.cart];
       this.sortItems();
       this.filterItems();
     },
+    /**
+     * Sorts the filteredCart items based on the current sortOrder.
+     */
     sortItems() {
       if (this.sortOrder === 'price-asc') {
         this.filteredCart.sort((a, b) => a.price - b.price);
@@ -62,15 +100,26 @@ export default {
         this.filteredCart.sort((a, b) => b.price - a.price);
       }
     },
+    /**
+     * Filters the cart items based on the searchQuery.
+     */
     filterItems() {
       this.filteredCart = this.cart.filter(product => product.title.toLowerCase().includes(this.searchQuery.toLowerCase()));
       this.sortItems();
     },
+    /**
+     * Removes an item from the cart by its ID.
+     * @param {number} productId - The ID of the product to remove.
+     */
     removeFromCart(productId) {
       this.$store.commit('removeFromCart', productId);
     }
   },
   created() {
+    /**
+     * Called when the component is created.
+     * Initializes the filteredCart property.
+     */
     this.updateFilteredCart();
   }
 };

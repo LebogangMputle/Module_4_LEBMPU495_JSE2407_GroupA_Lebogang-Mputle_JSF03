@@ -32,29 +32,72 @@
 
 <script>
 export default {
+  /**
+   * Component data.
+   * @returns {Object} The component data.
+   */
   data() {
     return {
+      /**
+       * The sorting order of wishlist items.
+       * @type {string}
+       */
       sortOrder: 'default',
+
+      /**
+       * The search query for filtering wishlist items.
+       * @type {string}
+       */
       searchQuery: '',
+
+      /**
+       * The filtered list of wishlist items based on sorting and filtering.
+       * @type {Array<Object>}
+       */
       filteredWishlist: []
     };
   },
   computed: {
+    /**
+     * Retrieves the wishlist from the Vuex store.
+     * @returns {Array<Object>} The wishlist items.
+     */
     wishlist() {
       return this.$store.getters.wishlist;
     }
   },
   watch: {
+    /**
+     * Watches for changes in the wishlist and updates the filtered wishlist.
+     * @param {Array<Object>} newWishlist - The updated wishlist.
+     */
     wishlist: 'updateFilteredWishlist',
+
+    /**
+     * Watches for changes in the sorting order and applies sorting.
+     * @param {string} newSortOrder - The new sorting order.
+     */
     sortOrder: 'sortItems',
+
+    /**
+     * Watches for changes in the search query and applies filtering.
+     * @param {string} newSearchQuery - The new search query.
+     */
     searchQuery: 'filterItems'
   },
   methods: {
+    /**
+     * Updates the filtered wishlist based on the current sorting order and search query.
+     */
     updateFilteredWishlist() {
       this.filteredWishlist = [...this.wishlist];
       this.sortItems();
       this.filterItems();
     },
+
+    /**
+     * Sorts the filtered wishlist based on the selected sorting order.
+     */
     sortItems() {
       if (this.sortOrder === 'price-asc') {
         this.filteredWishlist.sort((a, b) => a.price - b.price);
@@ -62,10 +105,19 @@ export default {
         this.filteredWishlist.sort((a, b) => b.price - a.price);
       }
     },
+
+    /**
+     * Filters the wishlist items based on the search query.
+     */
     filterItems() {
       this.filteredWishlist = this.wishlist.filter(product => product.title.toLowerCase().includes(this.searchQuery.toLowerCase()));
       this.sortItems();
     },
+
+    /**
+     * Removes an item from the wishlist.
+     * @param {number} productId - The ID of the product to remove.
+     */
     removeFromWishlist(productId) {
       this.$store.commit('removeFromWishlist', productId);
     }
@@ -77,6 +129,9 @@ export default {
 </script>
 
 <style scoped>
+/**
+ * Styles for the product card component.
+ */
 .product-card {
   border-radius: 15px;
   overflow: hidden;
