@@ -17,10 +17,18 @@ export default {
   },
   data() {
     return {
-      showLoginModal: false, // Set to false initially
+      /**
+       * Controls the visibility of the login modal.
+       * @type {boolean}
+       */
+      showLoginModal: false
     };
   },
   methods: {
+    /**
+     * Handles user login by navigating to the product list page.
+     * Closes the login modal after login.
+     */
     handleLogin() {
       this.$router.push('/product-list'); // Navigate to product list on login
       this.showLoginModal = false;
